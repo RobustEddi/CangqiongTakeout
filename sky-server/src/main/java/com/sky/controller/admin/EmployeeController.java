@@ -27,7 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/employee")
 @Slf4j
-@Api(tags="员工相关接口")
+@Api(tags = "员工相关接口")
 public class EmployeeController {
 
     @Autowired
@@ -42,7 +42,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/login")
-    @ApiOperation(value = "员工登录")
+    @ApiOperation(value = "员工登录666")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
 
@@ -79,14 +79,15 @@ public class EmployeeController {
 
     /**
      * 新增员工
+     *
      * @param employeeDTO
      * @return
      */
     @PostMapping
     @ApiOperation("新增员工")
     public Result save(@RequestBody EmployeeDTO employeeDTO) {
-        log.info("新增员工：{}",employeeDTO);// {}为占位符
-        System.out.println("当前线程id:"+Thread.currentThread().getId());
+        log.info("新增员工：{}", employeeDTO);// {}为占位符
+        System.out.println("当前线程id:" + Thread.currentThread().getId());
         employeeService.save(employeeDTO);
 
 
@@ -96,10 +97,52 @@ public class EmployeeController {
     @GetMapping("/page")
     @ApiOperation("员工分页查询")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
-        log.info("员工分页查询，参数为：{}",employeePageQueryDTO);
+        log.info("员工分页查询，参数为：{}", employeePageQueryDTO);
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
 
+
     }
+
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工参数")
+    // 如果参数使用了路径参数，则需要在参数前面加注解@PathVariable
+    public Result startOrstop(@PathVariable("status") Integer status, Long id) {
+        log.info("启用禁用员工账号：{}，{}", status, id);
+        employeeService.startOrStop(status, id);
+
+        return Result.success();
+    }
+
+    /**
+     * 根据id查询员工信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询员工信息")
+    public Result<Employee> getById(@PathVariable Long id) {
+        Employee employee=employeeService.getById(id);
+
+        return Result.success(employee);
+    }
+
+
+    /**
+     * 编辑员工信息
+     * @param employeeDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("编辑员工信息")
+    public Result update(@RequestBody EmployeeDTO employeeDTO) {
+
+        log.info("编辑员工信息：{}",employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success();
+
+    }
+
 
 }
