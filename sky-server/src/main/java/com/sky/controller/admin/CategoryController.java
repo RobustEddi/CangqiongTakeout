@@ -62,6 +62,7 @@ public class CategoryController {
         log.info("删除分类：{}", id);
         categoryService.deleteById(id);
         return Result.success();
+
     }
 
     /**
