@@ -48,10 +48,10 @@ public class CategoryServiceImpl implements CategoryService {
         category.setStatus(StatusConstant.DISABLE);
 
         //设置创建时间、修改时间、创建人、修改人
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateTime(LocalDateTime.now());
-        category.setCreateUser(BaseContext.getCurrentId()); //通过调用BaseContext的getCurrentId()方法，将之前在JwtToken代码中存入线程的当前id取出来。
-        category.setUpdateUser(BaseContext.getCurrentId());
+//        category.setCreateTime(LocalDateTime.now()); // 通过切面给公共属性进行了赋值，原来的代码不需要了
+//        category.setUpdateTime(LocalDateTime.now());// 通过切面给公共属性进行了赋值，原来的代码不需要了
+//        category.setCreateUser(BaseContext.getCurrentId()); //通过调用BaseContext的getCurrentId()方法，将之前在JwtToken代码中存入线程的当前id取出来。 // 通过切面给公共属性进行了赋值，原来的代码不需要了
+//        category.setUpdateUser(BaseContext.getCurrentId());// 通过切面给公共属性进行了赋值，原来的代码不需要了
 
         categoryMapper.insert(category);
     }
@@ -100,8 +100,8 @@ public class CategoryServiceImpl implements CategoryService {
         BeanUtils.copyProperties(categoryDTO,category);
 
         //设置修改时间、修改人
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
+//        category.setUpdateTime(LocalDateTime.now()); // 通过切面给公共属性进行了赋值，原来的代码不需要了
+//        category.setUpdateUser(BaseContext.getCurrentId());// 通过切面给公共属性进行了赋值，原来的代码不需要了
 
         categoryMapper.update(category);
     }
@@ -115,8 +115,8 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = Category.builder()
                 .id(id)
                 .status(status)
-                .updateTime(LocalDateTime.now())
-                .updateUser(BaseContext.getCurrentId())
+//                .updateTime(LocalDateTime.now())  // 通过切面给公共属性进行了赋值，原来的代码不需要了
+//                .updateUser(BaseContext.getCurrentId())  // 通过切面给公共属性进行了赋值，原来的代码不需要了
                 .build();
         categoryMapper.update(category);
     }

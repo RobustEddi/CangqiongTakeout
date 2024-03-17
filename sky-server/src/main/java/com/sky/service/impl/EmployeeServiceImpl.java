@@ -95,18 +95,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStatus(StatusConstant.ENABLE);
 
         //设置当前记录的创建时间与修改时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());// 通过切面给公共属性进行了赋值，原来的代码不需要了
+//        employee.setUpdateTime(LocalDateTime.now());// 通过切面给公共属性进行了赋值，原来的代码不需要了
         // 设置当前记录创建人id与修改人id
         // 后期需要改为当前登录用户的id(已修改)
 //        employee.setCreateUser(10L);
 //        employee.setUpdateUser(10L);
         // 将拦截器传过来的线程中的局部变量empId获取到
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+//        employee.setCreateUser(BaseContext.getCurrentId());// 通过切面给公共属性进行了赋值，原来的代码不需要了
+//        employee.setUpdateUser(BaseContext.getCurrentId());// 通过切面给公共属性进行了赋值，原来的代码不需要了
         // 创建持久层employeeMapper中的insert方法，在持久层employeeMapper中插入封装好的employee对象
         employeeMapper.insert(employee);
-
     }
 
     /**
@@ -145,13 +144,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .id(id)
                 .build();
         employeeMapper.update(employee);
-
-
-
-
-
-
-
     }
 
     /**
