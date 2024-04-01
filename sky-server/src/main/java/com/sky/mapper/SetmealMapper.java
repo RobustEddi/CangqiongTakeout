@@ -7,6 +7,13 @@ import org.apache.ibatis.annotations.Select;
 public interface SetmealMapper {
 
     /**
+     * 根据菜品id 查询套餐状态
+     * @param id
+     * @return
+     */
+    Integer getSetmealStatus(Long id);
+
+    /**
      * 根据分类id查询套餐的数量
      * @param id
      * @return

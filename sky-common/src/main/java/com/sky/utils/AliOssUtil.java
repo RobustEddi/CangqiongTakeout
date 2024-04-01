@@ -26,6 +26,7 @@ public class AliOssUtil {
      * @param objectName
      * @return
      */
+    // 返回结果是上传过后图片的网址
     public String upload(byte[] bytes, String objectName) {
 
         // 创建OSSClient实例。
@@ -64,5 +65,8 @@ public class AliOssUtil {
         log.info("文件上传到:{}", stringBuilder.toString());
 
         return stringBuilder.toString();
+
+
+
     }
 }
