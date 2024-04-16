@@ -94,7 +94,7 @@ public class DishServiceImpl implements DishService {
         }
         //删除菜品表中的菜品数据
 //        for (Long id : ids) {
-//            // TODO
+//
 //            dishMapper.deleteById(id);
 //        }
         //删除菜品表中的菜品数据(利用动态sql优化后)
@@ -181,6 +181,21 @@ public class DishServiceImpl implements DishService {
 
 
 
+    }
+
+    /**
+     *根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Dish> list(Long categoryId) {
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)  // 筛选在售的菜品
+                .build();
+        // TODO:20240414
+        return dishMapper.list(dish);
     }
 
 
