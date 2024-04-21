@@ -10,6 +10,10 @@
 
 
     </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into setmeal_dish (setmeal_id,dish_id,name,price,copies)
+        values (#{setmealId}, #{dishId}, #{name}, #{price}, #{copies});
+    </insert>
 
 
 </mapper>
