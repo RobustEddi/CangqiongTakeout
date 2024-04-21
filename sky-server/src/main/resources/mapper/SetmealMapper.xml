@@ -11,7 +11,21 @@
 
     <select id="getSetmealStatus" resultType="java.lang.Integer">
         select s.status from setmeal_dish sd left outer join setmeal s on sd.setmeal_id =s.id where sd.dish_id =#{id}
+    </select>
 
-
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        select s.*,c.name from setmeal s left outer join category c on s.category_id=c.id
+        <where>
+            <if test="name !=null">
+                and s.name like concat('%',#{name},'%') -- 查询name时使用模糊查询
+            </if>
+            <if test="categoryId != null">
+                and s.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and s.status = #{status}
+            </if>
+        </where>
+        order by s.create_time desc
     </select>
 </mapper>

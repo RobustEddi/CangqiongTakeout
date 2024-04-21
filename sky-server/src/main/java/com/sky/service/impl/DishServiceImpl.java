@@ -64,6 +64,11 @@ public class DishServiceImpl implements DishService {
         }
     }
 
+    /**
+     * 菜品分类查询
+     * @param dishPageQueryDTO
+     * @return
+     */
     @Override
     public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
         PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
@@ -128,20 +133,16 @@ public class DishServiceImpl implements DishService {
 
         return dishVO;
     }
-
     @Override
     public void updateWithFlavor(DishDTO dishDTO) {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
         // 修改菜品基本信息
         dishMapper.update(dish);
-
         //修改口味基本信息
         // /删除原来口味
         dishFlavorMapper.deleteFlavorById(dish.getId());
-
         // /添加新口味
-
         List<DishFlavor> flavors = dishDTO.getFlavors();
         if (flavors != null && flavors.size() > 0) {
             flavors.forEach(dishFlavor -> {
@@ -150,7 +151,6 @@ public class DishServiceImpl implements DishService {
         }
         dishFlavorMapper.insertBatch(flavors);
     }
-
     /**
      * 根据菜品id启用禁用菜品
      * @param status
@@ -167,22 +167,12 @@ public class DishServiceImpl implements DishService {
             log.info("套餐没被启用，可以更新菜品状态");
             dish.setStatus(status);
             dishMapper.update(dish);
-
-
         } else {
             log.info("套餐被启用，无法更新菜品状态");
             // 存在当前菜品被套餐关联情况，不能删除
             throw new DeletionNotAllowedException("菜品关联套餐被启用，无法更新菜品状态");
-
         }
-
-
-
-
-
-
     }
-
     /**
      *根据分类id查询菜品
      * @param categoryId
@@ -197,8 +187,6 @@ public class DishServiceImpl implements DishService {
         // TODO:20240414
         return dishMapper.list(dish);
     }
-
-
 }
 
 
