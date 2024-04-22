@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  *
  */
@@ -36,7 +38,11 @@ public class SetmealController {
         return Result.success();
     }
 
-
+    /**
+     * 套餐分页查询
+     * @param setmealPageQueryDTO
+     * @return
+     */
     @GetMapping("/page")
     @ApiOperation("套餐分页查询")
     public Result<PageResult> page(SetmealPageQueryDTO setmealPageQueryDTO) {// 由于请求参数是Query的方式（地址栏加上？key=value），因此不需要在参数之前加@RequestBody注解
@@ -45,6 +51,18 @@ public class SetmealController {
         return Result.success(pageResult);
     }
 
+    /**
+     * 套餐删除
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    @ApiOperation("套餐删除")
+    public Result delete(@RequestParam List<Long> ids) {// 加上@RequestParam注解后，可以由MVC框架动态的解析里面参数字符串
+        log.info("套餐删除：{}",ids);
+        setmealService.deleteBatch(ids);
+        return Result.success();
+    }
 
 
 
