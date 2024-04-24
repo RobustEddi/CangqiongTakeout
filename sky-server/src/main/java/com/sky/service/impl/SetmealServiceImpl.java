@@ -17,6 +17,7 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.SetmealService;
 import com.sky.vo.SetmealVO;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private SetmealDishMapper setmealDishMapper;
 
+    @Autowired
+    private DishMapper dishMapper;
     /**
      * 新增菜品
      * @param setmealDTO
@@ -105,4 +108,79 @@ public class SetmealServiceImpl implements SetmealService {
         }
     }
 
+    /**
+     * 根据套餐id查询套餐
+     * @param id
+     * @return
+     */
+    @Override
+    public SetmealVO getById(Long id) {
+        // 根据套餐id查询套餐
+        Setmeal setmeal = setmealMapper.getSetmealById(id);
+        // 根据套餐id查询菜品数据
+        List<SetmealDish> setmealDishes = setmealDishMapper.getDishBySetmealId(id);
+        // 将查询到的套餐、套餐菜品数据分装到SetmealVO
+        SetmealVO setmealVO = new SetmealVO();
+        BeanUtils.copyProperties(setmeal, setmealVO);
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
+    }
+
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     */
+    @Override
+    public void updateSetmeal(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO,setmeal);
+        // 修改套餐基本信息
+        setmealMapper.update(setmeal);
+
+        // 修改套餐菜品信息
+        /// 删除原来套餐菜品
+        setmealDishMapper.deleteBySetmealId(setmeal.getId());
+        /// 添加新的套餐菜品
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        if (setmealDishes != null && setmealDishes.size() > 0) {
+            //// 遍历为DTO中的套餐菜品属性添加setmealId信息
+            for (SetmealDish setmealDish : setmealDishes
+            ) {
+                setmealDish.setSetmealId(setmeal.getId());
+                setmealDishMapper.insert(setmealDish);
+            }
+        }
+    }
+    /**
+     * 启停套餐
+     * @param status
+     * @param id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        // TODO 202404250045-->有个小bug
+        Setmeal setmeal = setmealMapper.getSetmealById(id);
+        //判断起售停售逻辑
+        if (setmeal.getStatus() == 1 && status == 0) {
+            /// 若原状态为起售，可将其设置为停售状态
+            setmeal.setStatus(status);
+        } else{
+            ///若原状态为停售，需判断套餐菜品是否包含停售菜品，不包含之后才能进行套餐起售
+            //// 判断是否包含停售菜品（遍历套餐包含菜品）
+            List<SetmealDish> setmealDishes = setmealDishMapper.getDishBySetmealId(id);
+            for (SetmealDish setmealDish : setmealDishes
+            ) {
+                // 获取菜品状态
+                Integer flag= dishMapper.getById(setmealDish.getDishId()).getStatus();
+                ///菜品状态为停售，则不能起售套餐，需要报异常
+                if (flag == 0) {
+                    log.info("菜品状态为停售，不能起售套餐");
+                    // 存在当前菜品被套餐关联情况，不能删除
+                    throw new DeletionNotAllowedException("菜品状态为停售，不能起售套餐");
+                }
+            }
+            /// 套餐不包含停售菜品，可以进行套餐起售
+            setmeal.setStatus(status);
+        }
+    }
 }

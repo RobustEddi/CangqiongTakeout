@@ -98,8 +98,6 @@ public class DishController {
         return Result.success();
 
     }
-
-
     /**
      * 根据分类id查询菜品
      * @param categoryId
@@ -111,14 +109,5 @@ public class DishController {
         List<Dish> list = dishService.list(categoryId);
         return Result.success(list);
     }
-
-
-
-
-
-
-
-
-
 
 }
