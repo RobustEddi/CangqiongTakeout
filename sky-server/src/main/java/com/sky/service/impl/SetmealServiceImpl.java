@@ -164,6 +164,9 @@ public class SetmealServiceImpl implements SetmealService {
         if (setmeal.getStatus() == 1 && status == 0) {
             /// 若原状态为起售，可将其设置为停售状态
             setmeal.setStatus(status);
+            // 更新数据库
+            setmealMapper.update(setmeal);
+
         } else{
             ///若原状态为停售，需判断套餐菜品是否包含停售菜品，不包含之后才能进行套餐起售
             //// 判断是否包含停售菜品（遍历套餐包含菜品）
@@ -181,6 +184,8 @@ public class SetmealServiceImpl implements SetmealService {
             }
             /// 套餐不包含停售菜品，可以进行套餐起售
             setmeal.setStatus(status);
+            // 更新数据库
+            setmealMapper.update(setmeal);
         }
     }
 }

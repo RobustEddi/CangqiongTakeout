@@ -13,6 +13,12 @@ spring:
       url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
+  redis:
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password: ${sky.redis.password}
+    database: ${sky.redis.database}
+    # redis服务启动后，默认创建了16个数据库db0-db15，默认数据库为db0，通过配置database属性，来指定使用的数据库；不同数据库中的数据是完全隔离的
 
 mybatis:
   #mapper配置文件
