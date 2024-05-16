@@ -5,6 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * 这个 Java 类是一个 Spring Boot 应用程序的配置属性类。它使用了 @ConfigurationProperties 注解，将应用程序配置文件中以 "sky.wechat" 为
+ * 前缀的属性映射到这个类的字段中。@Data 注解来自 Lombok 库，它可以生成 getter 和 setter 方法以及其他一些实用方法，如 toString、equals
+ * 和 hashCode。
+ */
 @Component
 @ConfigurationProperties(prefix = "sky.wechat")
 @Data
