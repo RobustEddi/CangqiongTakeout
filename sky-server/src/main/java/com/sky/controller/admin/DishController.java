@@ -65,7 +65,7 @@ public class DishController {
         dishService.deleteBatch(ids);
 
         // 删除菜品可能会影响到多个key，这里为了简便，清理所有以"dish_"开头的redis的key
-        /// 获取dish_开头的redis key的集合
+        /// 获取dish_开头的redis key的集合(构造Redis中的key，规则：dish_分类id)
         cleanCache("dish_*");
         return Result.success();
     }
