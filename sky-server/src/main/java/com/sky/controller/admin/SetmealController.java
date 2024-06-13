@@ -14,6 +14,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class SetmealController {
      */
     @PostMapping
     @ApiOperation("新增套餐")
+    @CacheEvict(cacheNames = "setmealCache",key = "#setmealDTO.categoryId") //key:   setmealCache::10
     public Result save(@RequestBody SetmealDTO setmealDTO) {
         log.info("新增套餐：{}", setmealDTO);
         setmealService.save(setmealDTO);
@@ -61,6 +64,7 @@ public class SetmealController {
      */
     @DeleteMapping
     @ApiOperation("套餐删除")
+    @CacheEvict(cacheNames = "setmealCache",key = "#ids") //key:   setmealCache::10
     public Result delete(@RequestParam List<Long> ids) {// 加上@RequestParam注解后，可以由MVC框架动态的解析里面参数字符串
         log.info("套餐删除：{}",ids);
         setmealService.deleteBatch(ids);
@@ -73,9 +77,10 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/{id}")
-    @ApiOperation("根据套餐id查询套餐")
+    @ApiOperation("根据分类id查询套餐")
+    @Cacheable(cacheNames = "setmealCache",key = "#id") //key:   setmealCache::10
     public Result<SetmealVO> getById(@PathVariable Long id) {  // SetmealVO相比Seatmeal主体，里面多包含了与菜品的关系
-        log.info("根据套餐id查询套餐：{}",id);
+        log.info("根据分类id查询套餐：{}",id);
         SetmealVO setmealVO = setmealService.getById(id);
         return Result.success(setmealVO);
     }
@@ -86,6 +91,7 @@ public class SetmealController {
      */
     @PutMapping
     @ApiOperation("修改套餐")
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true) //key:   setmealCache::10
     public Result updateSetmeal(@RequestBody SetmealDTO setmealDTO) {
         log.info("修改套餐：{}",setmealDTO);
         setmealService.updateSetmeal(setmealDTO);
